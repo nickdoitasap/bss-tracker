@@ -12,11 +12,7 @@
     --surface: var(--tg-theme-secondary-bg-color, #1a1a1a);
     --text: var(--tg-theme-text-color, #ffffff);
     --hint: var(--tg-theme-hint-color, #888);
-    --link: var(--tg-theme-link-color, #e8ff3a);
-    --btn: var(--tg-theme-button-color, #e8ff3a);
-    --btn-text: var(--tg-theme-button-text-color, #000000);
     --accent: #e8ff3a;
-    --accent2: #ff5c2e;
     --green: #5ddd6e;
     --green-bg: rgba(93,221,110,0.08);
     --green-border: rgba(93,221,110,0.3);
@@ -24,380 +20,191 @@
     --border: rgba(255,255,255,0.08);
     --radius: 14px;
     --radius-sm: 8px;
+    --red: #ff5c2e;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
   body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Manrope', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
-    padding-bottom: env(safe-area-inset-bottom, 20px);
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   }
-
-  /* ── HEADER ── */
   .app-header {
-    padding: 16px 16px 12px;
+    padding: 14px 16px 12px;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 10px;
   }
-  .app-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 3px;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .app-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.55rem;
-    color: var(--hint);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    line-height: 1.4;
-  }
-  .header-export {
-    margin-left: auto;
-    display: flex;
-    gap: 6px;
-  }
+  .app-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 3px; color: var(--accent); line-height: 1; }
+  .app-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: var(--hint); text-transform: uppercase; letter-spacing: 1.5px; line-height: 1.4; }
+  .header-right { margin-left: auto; display: flex; gap: 6px; align-items: center; }
   .icon-btn {
     width: 34px; height: 34px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all .15s;
-    color: var(--hint);
+    font-size: 15px; cursor: pointer; transition: all .15s;
   }
   .icon-btn:active { background: var(--border); transform: scale(0.95); }
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #444; transition: background .3s; margin: 0 2px; }
+  .sync-dot.ok { background: var(--green); }
+  .sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
+  .sync-dot.err { background: var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .unit-toggle {
+    display: flex; height: 34px;
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    overflow: hidden; cursor: pointer; user-select: none;
+  }
+  .unit-opt {
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+    color: var(--hint); transition: all .15s; letter-spacing: 0.5px;
+  }
+  .unit-opt.active { background: var(--accent); color: #000; }
 
-  /* ── WEEK TABS ── */
+  /* SETUP */
+  .setup-banner {
+    margin: 12px 16px;
+    background: rgba(232,255,58,0.07);
+    border: 1px solid rgba(232,255,58,0.25);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .setup-banner h3 { font-size: 0.78rem; color: var(--accent); margin-bottom: 6px; }
+  .setup-banner p { font-size: 0.68rem; color: var(--hint); line-height: 1.5; margin-bottom: 10px; }
+  .setup-input {
+    width: 100%; background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(232,255,58,0.3); border-radius: 8px;
+    color: var(--text); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; padding: 9px 12px; outline: none; margin-bottom: 8px;
+  }
+  .setup-input:focus { border-color: var(--accent); }
+  .setup-input::placeholder { color: #555; }
+  .setup-btn {
+    width: 100%; background: var(--accent); color: #000;
+    border: none; border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px; cursor: pointer; transition: opacity .15s;
+  }
+  .setup-btn:active { opacity: 0.8; }
+  .setup-dismiss { font-size: 0.62rem; color: var(--hint); text-align: center; margin-top: 8px; cursor: pointer; text-decoration: underline; }
+
+  /* TABS */
   .week-tabs-wrap {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 16px; display: flex; overflow-x: auto; scrollbar-width: none;
   }
   .week-tabs-wrap::-webkit-scrollbar { display: none; }
   .week-tab {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.5px;
-    padding: 11px 14px;
-    color: var(--hint);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-    transition: all .15s;
-    user-select: none;
-    position: relative;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    padding: 11px 14px; color: var(--hint); cursor: pointer;
+    border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: all .15s; user-select: none; position: relative;
   }
   .week-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .week-tab .dot {
-    position: absolute;
-    top: 8px; right: 8px;
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--green);
-  }
+  .week-tab .dot { position: absolute; top: 8px; right: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
   .add-week-tab {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    padding: 11px 12px;
-    color: #444;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: color .15s;
-    user-select: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    padding: 11px 12px; color: #444; cursor: pointer; white-space: nowrap;
   }
   .add-week-tab:active { color: var(--accent); }
 
-  /* ── WEEK DATE ── */
-  .week-meta {
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid var(--border);
-  }
+  /* META */
+  .week-meta { padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
   .week-date-btn {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--hint);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-    transition: all .15s;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--hint);
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; cursor: pointer;
   }
   .week-date-btn.has-date { color: var(--accent); border-color: rgba(232,255,58,0.3); }
-  .week-date-input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    width: 1px; height: 1px;
-  }
-  .week-progress {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .progress-pips {
-    display: flex;
-    gap: 4px;
-  }
-  .pip {
-    width: 8px; height: 8px;
-    border-radius: 2px;
-    background: var(--border);
-    transition: background .2s;
-  }
+  .week-date-input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+  .week-progress { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .progress-pips { display: flex; gap: 4px; }
+  .pip { width: 8px; height: 8px; border-radius: 2px; background: var(--border); transition: background .2s; }
   .pip.done { background: var(--green); }
-  .progress-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--hint);
-  }
+  .progress-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--hint); }
 
-  /* ── DAYS LIST ── */
-  .days-list {
-    padding: 12px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  /* ── DAY CARD ── */
-  .day-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: border-color .2s, background .2s;
-  }
-  .day-card.done {
-    background: var(--green-bg);
-    border-color: var(--green-border);
-  }
-  .day-card-head {
-    display: flex;
-    align-items: center;
-    padding: 13px 14px;
-    cursor: pointer;
-    user-select: none;
-    gap: 12px;
-  }
-  .day-num-badge {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    line-height: 1;
-    color: var(--accent);
-    min-width: 24px;
-  }
+  /* DAYS */
+  .days-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .2s, background .2s; }
+  .day-card.done { background: var(--green-bg); border-color: var(--green-border); }
+  .day-card-head { display: flex; align-items: center; padding: 13px 14px; cursor: pointer; user-select: none; gap: 12px; }
+  .day-num-badge { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; line-height: 1; color: var(--accent); min-width: 24px; }
   .day-card.done .day-num-badge { color: var(--green); }
   .day-title-col { flex: 1; }
-  .day-title {
-    font-size: 0.78rem;
-    font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: 0.3px;
-  }
+  .day-title { font-size: 0.78rem; font-weight: 600; line-height: 1.3; }
   .day-card.done .day-title { color: var(--green); }
-  .day-subtitle {
-    font-size: 0.62rem;
-    color: var(--hint);
-    margin-top: 2px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .day-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .day-subtitle { font-size: 0.62rem; color: var(--hint); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+  .day-actions { display: flex; align-items: center; gap: 8px; }
   .done-toggle {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: transparent;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--border); background: transparent;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all .2s;
-    color: transparent;
+    font-size: 13px; cursor: pointer; transition: all .2s; color: transparent;
   }
-  .day-card.done .done-toggle {
-    background: var(--green);
-    border-color: var(--green);
-    color: #000;
-  }
-  .chevron {
-    font-size: 10px;
-    color: var(--hint);
-    transition: transform .2s;
-  }
+  .day-card.done .done-toggle { background: var(--green); border-color: var(--green); color: #000; }
+  .chevron { font-size: 10px; color: var(--hint); transition: transform .2s; }
   .day-card.expanded .chevron { transform: rotate(180deg); }
-
-  /* ── EXERCISES ── */
-  .exercises-wrap {
-    display: none;
-    border-top: 1px solid var(--border);
-    padding: 0;
-  }
+  .exercises-wrap { display: none; border-top: 1px solid var(--border); }
   .day-card.done .exercises-wrap { border-top-color: var(--green-border); }
   .day-card.expanded .exercises-wrap { display: block; }
-  .exercise-item {
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
-  }
+  .exercise-item { padding: 12px 14px; border-bottom: 1px solid var(--border); }
   .day-card.done .exercise-item { border-bottom-color: rgba(255,255,255,0.04); }
   .exercise-item:last-child { border-bottom: none; }
-  .ex-name {
-    font-size: 0.72rem;
-    font-style: italic;
-    color: var(--text);
-    line-height: 1.4;
-    margin-bottom: 3px;
-  }
-  .ex-sets {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.58rem;
-    color: var(--hint);
-    margin-bottom: 8px;
-  }
-  .ex-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+  .ex-name { font-size: 0.72rem; font-style: italic; color: var(--text); line-height: 1.4; margin-bottom: 3px; }
+  .ex-sets { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: var(--hint); margin-bottom: 8px; }
+  .ex-row { display: flex; gap: 8px; align-items: center; }
   .ex-weight-wrap {
-    display: flex;
-    align-items: center;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    height: 34px;
+    display: flex; align-items: center;
+    background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; height: 34px;
   }
   .ex-weight-wrap:focus-within { border-color: var(--accent); }
   .weight-minus, .weight-plus {
-    width: 30px; height: 34px;
-    background: transparent;
-    border: none;
-    color: var(--hint);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: color .15s;
-    user-select: none;
+    width: 30px; height: 34px; background: transparent; border: none;
+    color: var(--hint); font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; user-select: none;
   }
   .weight-minus:active, .weight-plus:active { color: var(--accent); }
   .weight-input {
-    width: 52px;
-    background: transparent;
-    border: none;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: center;
-    outline: none;
-    padding: 0;
-    -moz-appearance: textfield;
+    width: 52px; background: transparent; border: none; color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 600;
+    text-align: center; outline: none; padding: 0; -moz-appearance: textfield;
   }
-  .weight-input::-webkit-outer-spin-button,
-  .weight-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-  .weight-unit {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.58rem;
-    color: var(--hint);
-    padding-right: 8px;
-  }
+  .weight-input::-webkit-outer-spin-button, .weight-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .weight-unit { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: var(--hint); padding-right: 8px; }
+  .ex-weight-wrap.compact .weight-input { width: 40px; }
+  .ex-weight-wrap.compact .weight-minus, .ex-weight-wrap.compact .weight-plus { width: 26px; }
+  .ex-dual-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
   .note-input {
-    flex: 1;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'Manrope', sans-serif;
-    font-size: 0.7rem;
-    padding: 0 10px;
-    height: 34px;
-    outline: none;
-    min-width: 0;
+    flex: 1; background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem; padding: 0 10px; height: 34px; outline: none; min-width: 0;
   }
   .note-input::placeholder { color: #444; }
-  .note-input:focus { border-color: rgba(255,255,255,0.2); }
-
-  /* ── WEEK NOTE ── */
-  .week-note-wrap {
-    padding: 12px 16px 16px;
-  }
-  .week-note-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--hint);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 7px;
-  }
+  .week-note-wrap { padding: 12px 16px 16px; }
+  .week-note-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--hint); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 7px; }
   .week-note-input {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    font-family: 'Manrope', sans-serif;
-    font-size: 0.75rem;
-    padding: 10px 12px;
-    resize: none;
-    outline: none;
-    line-height: 1.5;
+    width: 100%; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text); font-family: 'Manrope', sans-serif;
+    font-size: 0.75rem; padding: 10px 12px; resize: none; outline: none; line-height: 1.5;
   }
-  .week-note-input:focus { border-color: rgba(255,255,255,0.2); }
   .week-note-input::placeholder { color: #444; }
-
-  /* ── TOAST ── */
   .toast {
-    position: fixed;
-    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
+    position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 50%;
     transform: translateX(-50%) translateY(20px);
-    background: var(--accent);
-    color: #000;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    padding: 10px 20px;
-    border-radius: 30px;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: all .25s;
-    pointer-events: none;
-    z-index: 200;
-    white-space: nowrap;
+    background: var(--accent); color: #000;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 1px; padding: 10px 20px; border-radius: 30px; text-transform: uppercase;
+    opacity: 0; transition: all .25s; pointer-events: none; z-index: 200; white-space: nowrap;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* ── HAPTIC feel via active states ── */
-  .day-card-head:active { opacity: 0.8; }
+  .toast.err { background: var(--red); color: #fff; }
 </style>
 </head>
 <body>
@@ -407,151 +214,220 @@
     <div class="app-logo">БСС</div>
     <div class="app-sub">Больше · Стройнее · Сильнее</div>
   </div>
-  <div class="header-export">
-    <div class="icon-btn" onclick="exportCSV()" title="CSV">📄</div>
-    <div class="icon-btn" onclick="exportXLSX()" title="Excel">📊</div>
+  <div class="header-right">
+    <div class="sync-dot" id="syncDot" title="статус синхронизации"></div>
+    <div class="unit-toggle" onclick="toggleUnit()" id="unitToggle" title="Переключить единицы">
+      <div class="unit-opt active" id="unitKg">КГ</div>
+      <div class="unit-opt" id="unitLb">LB</div>
+    </div>
+    <div class="icon-btn" onclick="forcSync()" title="Синхронизировать">☁️</div>
+    <div class="icon-btn" onclick="showSetup()" title="Настройки">⚙️</div>
   </div>
 </header>
 
+<div id="setupBanner"></div>
 <div class="week-tabs-wrap" id="weekTabs"></div>
-
 <div id="weekMeta" class="week-meta"></div>
-
 <div class="days-list" id="daysList"></div>
-
 <div class="week-note-wrap" id="weekNoteWrap"></div>
-
 <div class="toast" id="toast"></div>
-
 <input type="date" class="week-date-input" id="hiddenDateInput">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ── Telegram WebApp init ──────────────────────────────────────────────────
-const tg = window.Telegram?.WebApp;
-if (tg) {
-  tg.ready();
-  tg.expand();
-  tg.setHeaderColor('secondary_bg_color');
+const CFG_KEY = 'bss_script_url';
+let SCRIPT_URL = localStorage.getItem(CFG_KEY) || '';
+const UNIT_KEY = 'bss_unit';
+let unit = localStorage.getItem(UNIT_KEY) || 'kg'; // 'kg' | 'lb'
+const KG_TO_LB = 2.20462;
+const LB_STEP = 5;
+const KG_STEP = 2.5;
+
+function kgToDisplay(kg) {
+  if (!kg && kg !== 0) return '';
+  const v = parseFloat(kg);
+  if (isNaN(v)) return '';
+  if (unit === 'lb') return Math.round(v * KG_TO_LB * 10) / 10;
+  return v;
+}
+function displayToKg(val) {
+  const v = parseFloat(val);
+  if (isNaN(v)) return '';
+  if (unit === 'lb') return Math.round((v / KG_TO_LB) * 20) / 20;
+  return v;
+}
+function unitLabel() { return unit === 'lb' ? 'lb' : 'кг'; }
+function unitStep() { return unit === 'lb' ? LB_STEP : KG_STEP; }
+
+function toggleUnit() {
+  unit = unit === 'kg' ? 'lb' : 'kg';
+  localStorage.setItem(UNIT_KEY, unit);
+  document.getElementById('unitKg').classList.toggle('active', unit === 'kg');
+  document.getElementById('unitLb').classList.toggle('active', unit === 'lb');
+  if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+  renderDays();
+  showToast(unit === 'lb' ? 'Фунты (lb)' : 'Килограммы (кг)');
 }
 
-// ── ПРОГРАММА ─────────────────────────────────────────────────────────────
 const PROGRAM = [
-  {
-    day: 1, title: "Грудь, Трицепсы и Икры",
-    exercises: [
-      { name: "Жим лёжа на наклонной скамье", sets: "разм. подходы + 3 рабочих" },
-      { name: "Жим лёжа со штангой (прямая скамья)", sets: "3 рабочих подхода" },
-      { name: "Отжимание на брусьях (грудь, с утяжелением)", sets: "3 рабочих подхода" },
-      { name: "Жим на трицепс сидя", sets: "3 рабочих подхода" },
-      { name: "Схема №1 — икроножные мышцы", sets: "по схеме" },
-    ]
-  },
-  {
-    day: 2, title: "Спина, Бицепсы и Пресс",
-    exercises: [
-      { name: "Становая тяга со штангой", sets: "разм. подходы + 3 рабочих" },
-      { name: "Тяга штанги", sets: "3 рабочих подхода" },
-      { name: "Подтягивание широким хватом (с утяжелением)", sets: "3 рабочих подхода" },
-      { name: "Подъём штанги на бицепс", sets: "3 рабочих подхода" },
-      { name: "Комплекс на пресс", sets: "по программе" },
-    ]
-  },
-  {
-    day: 3, title: "Верхняя часть корпуса и Икры",
-    exercises: [
-      { name: "Жим штанги на наклонной скамье", sets: "разм. + 3×8–10 (облегч. вес, 1–2 мин)" },
-      { name: "Армейский жим со штангой (сидя или стоя)", sets: "разм. подходы + 3 рабочих" },
-      { name: "Подъём гантелей через стороны", sets: "3 рабочих подхода" },
-      { name: "Подъёмы гантелей (задние дельты, в наклоне)", sets: "3 рабочих подхода" },
-      { name: "Схема №2 — икроножные мышцы", sets: "по схеме" },
-    ]
-  },
-  {
-    day: 4, title: "Ноги и Пресс",
-    exercises: [
-      { name: "Присед со штангой", sets: "разм. подходы + 3 рабочих" },
-      { name: "Жим ногами", sets: "3 рабочих подхода" },
-      { name: "Мёртвая тяга", sets: "3 рабочих подхода" },
-      { name: "Комплекс на пресс", sets: "по программе" },
-    ]
-  }
+  { day:1, title:"Грудь, Трицепсы и Икры", exercises:[
+    {name:"Жим лёжа на наклонной скамье", sets:"разм. подходы + 3 рабочих"},
+    {name:"Жим лёжа со штангой (прямая скамья)", sets:"3 рабочих подхода"},
+    {name:"Отжимание на брусьях (с утяжелением)", sets:"3 рабочих подхода", withReps:true},
+    {name:"Жим на трицепс сидя", sets:"3 рабочих подхода"},
+    {name:"Схема №1 — икроножные мышцы", sets:"по схеме"},
+  ]},
+  { day:2, title:"Спина, Бицепсы и Пресс", exercises:[
+    {name:"Становая тяга со штангой", sets:"разм. подходы + 3 рабочих"},
+    {name:"Тяга штанги", sets:"3 рабочих подхода"},
+    {name:"Подтягивание широким хватом (с утяжелением)", sets:"3 рабочих подхода", withReps:true},
+    {name:"Подъём штанги на бицепс", sets:"3 рабочих подхода"},
+    {name:"Комплекс на пресс", sets:"по программе", repsOnly:true},
+  ]},
+  { day:3, title:"Верхняя часть корпуса и Икры", exercises:[
+    {name:"Жим штанги на наклонной скамье", sets:"разм. + 3×8–10 (облегч. вес)"},
+    {name:"Армейский жим со штангой (сидя/стоя)", sets:"разм. подходы + 3 рабочих"},
+    {name:"Подъём гантелей через стороны", sets:"3 рабочих подхода"},
+    {name:"Подъёмы гантелей (задние дельты, в наклоне)", sets:"3 рабочих подхода"},
+    {name:"Схема №2 — икроножные мышцы", sets:"по схеме"},
+  ]},
+  { day:4, title:"Ноги и Пресс", exercises:[
+    {name:"Присед со штангой", sets:"разм. подходы + 3 рабочих"},
+    {name:"Жим ногами", sets:"3 рабочих подхода"},
+    {name:"Мёртвая тяга", sets:"3 рабочих подхода"},
+    {name:"Комплекс на пресс", sets:"по программе", repsOnly:true},
+  ]},
 ];
 
-// ── ХРАНИЛИЩЕ ─────────────────────────────────────────────────────────────
-const KEY = 'bss_tg_v1';
-function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
-function save() { localStorage.setItem(KEY, JSON.stringify(db)); }
+const KEY = 'bss_tg_v2';
+function loadLocal() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
+function saveLocal() { localStorage.setItem(KEY, JSON.stringify(db)); }
 
-let db = load();
+let db = loadLocal();
 if (!db.numWeeks) db.numWeeks = 1;
 if (!db.weeks) db.weeks = {};
-
 let currentWeek = 1;
 let expandedDays = new Set();
+let syncTimer = null;
 
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('secondary_bg_color'); }
+
+// ── SYNC ──────────────────────────────────────────────────────────────────
+function setSyncStatus(s) {
+  const d = document.getElementById('syncDot');
+  if (d) d.className = 'sync-dot' + (s ? ' '+s : '');
+}
+
+async function syncToSheets() {
+  if (!SCRIPT_URL) return;
+  setSyncStatus('syncing');
+  try {
+    await fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ action:'save', data: db })
+    });
+    setSyncStatus('ok');
+    db.lastSync = new Date().toISOString();
+    saveLocal();
+  } catch(e) { setSyncStatus('err'); }
+}
+
+async function loadFromSheets() {
+  if (!SCRIPT_URL) return false;
+  setSyncStatus('syncing');
+  try {
+    const r = await fetch(SCRIPT_URL + '?action=load');
+    const j = await r.json();
+    if (j.status === 'ok' && j.data) {
+      db = j.data;
+      if (!db.numWeeks) db.numWeeks = 1;
+      if (!db.weeks) db.weeks = {};
+      saveLocal(); setSyncStatus('ok'); return true;
+    }
+    setSyncStatus('ok'); return false;
+  } catch(e) { setSyncStatus('err'); return false; }
+}
+
+function schedulSync() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(syncToSheets, 1500);
+}
+
+function forcSync() {
+  syncToSheets().then(() => showToast('Синхронизировано ☁️'));
+}
+
+// ── SETUP ─────────────────────────────────────────────────────────────────
+function renderSetupBanner(force=false) {
+  const el = document.getElementById('setupBanner');
+  if (!SCRIPT_URL || force) {
+    el.innerHTML = `<div class="setup-banner">
+      <h3>⚡ Подключить Google Sheets</h3>
+      <p>Вставь URL своего Apps Script — данные будут сохраняться в таблицу автоматически.</p>
+      <input class="setup-input" id="scriptUrlInput" type="url"
+        placeholder="https://script.google.com/macros/s/…/exec"
+        value="${SCRIPT_URL}">
+      <button class="setup-btn" onclick="applyScriptUrl()">Подключить</button>
+      ${SCRIPT_URL ? '' : '<div class="setup-dismiss" onclick="dismissSetup()">настрою позже</div>'}
+    </div>`;
+  } else { el.innerHTML = ''; }
+}
+function showSetup() { renderSetupBanner(true); window.scrollTo({top:0,behavior:'smooth'}); }
+function dismissSetup() { document.getElementById('setupBanner').innerHTML = ''; }
+
+async function applyScriptUrl() {
+  const val = (document.getElementById('scriptUrlInput')?.value || '').trim();
+  if (!val.includes('script.google.com')) { showToast('Неверный URL', true); return; }
+  SCRIPT_URL = val;
+  localStorage.setItem(CFG_KEY, SCRIPT_URL);
+  document.getElementById('setupBanner').innerHTML = '';
+  showToast('Загружаю данные…');
+  const loaded = await loadFromSheets();
+  render();
+  showToast(loaded ? 'Данные загружены ✓' : 'Подключено ☁️');
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
 function ensureWeek(w) {
-  if (!db.weeks[w]) db.weeks[w] = { startDate: '', note: '', days: {} };
+  if (!db.weeks[w]) db.weeks[w] = {startDate:'', note:'', days:{}};
   PROGRAM.forEach(d => {
     if (!db.weeks[w].days[d.day]) {
-      db.weeks[w].days[d.day] = { done: false, exercises: {} };
-      d.exercises.forEach((_, i) => {
-        db.weeks[w].days[d.day].exercises[i] = { weight: '', note: '' };
-      });
+      db.weeks[w].days[d.day] = {done:false, exercises:{}};
+      d.exercises.forEach((_,i) => { db.weeks[w].days[d.day].exercises[i] = {weight:'',note:''}; });
     }
   });
 }
 
-// ── РЕНДЕР ────────────────────────────────────────────────────────────────
 function renderTabs() {
-  const el = document.getElementById('weekTabs');
-  let html = '';
-  for (let w = 1; w <= db.numWeeks; w++) {
+  let h = '';
+  for (let w=1; w<=db.numWeeks; w++) {
     ensureWeek(w);
     const hasDone = PROGRAM.some(d => db.weeks[w].days[d.day]?.done);
-    const active = w === currentWeek ? ' active' : '';
-    html += `<div class="week-tab${active}" onclick="switchWeek(${w})">
-      НЕД ${w}${hasDone ? '<span class="dot"></span>' : ''}
-    </div>`;
+    h += `<div class="week-tab${w===currentWeek?' active':''}" onclick="switchWeek(${w})">НЕД ${w}${hasDone?'<span class="dot"></span>':''}</div>`;
   }
-  html += `<div class="add-week-tab" onclick="addWeek()">+ НЕД</div>`;
-  el.innerHTML = html;
+  h += `<div class="add-week-tab" onclick="addWeek()">+ НЕД</div>`;
+  document.getElementById('weekTabs').innerHTML = h;
 }
 
 function renderMeta() {
   ensureWeek(currentWeek);
   const wd = db.weeks[currentWeek];
-  const doneDays = PROGRAM.filter(d => wd.days[d.day]?.done).length;
-  const pips = PROGRAM.map((d, i) =>
-    `<div class="pip${wd.days[d.day]?.done ? ' done' : ''}"></div>`
-  ).join('');
-  const dateLabel = wd.startDate
-    ? formatDate(wd.startDate)
-    : '📅 дата начала';
+  const done = PROGRAM.filter(d => wd.days[d.day]?.done).length;
+  const pips = PROGRAM.map(d => `<div class="pip${wd.days[d.day]?.done?' done':''}"></div>`).join('');
+  const dl = wd.startDate ? new Date(wd.startDate+'T00:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short'}) : '📅 дата начала';
   document.getElementById('weekMeta').innerHTML = `
-    <div class="week-date-btn${wd.startDate ? ' has-date' : ''}" onclick="pickDate()">${dateLabel}</div>
-    <div class="week-progress">
-      <div class="progress-pips">${pips}</div>
-      <div class="progress-label">${doneDays}/${PROGRAM.length}</div>
-    </div>
-  `;
-}
-
-function formatDate(iso) {
-  const d = new Date(iso + 'T00:00:00');
-  return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+    <div class="week-date-btn${wd.startDate?' has-date':''}" onclick="pickDate()">${dl}</div>
+    <div class="week-progress"><div class="progress-pips">${pips}</div><div class="progress-label">${done}/${PROGRAM.length}</div></div>`;
 }
 
 function renderDays() {
   ensureWeek(currentWeek);
   const wd = db.weeks[currentWeek];
-  let html = '';
+  let h = '';
   PROGRAM.forEach(d => {
-    const dayData = wd.days[d.day];
-    const isDone = dayData?.done;
-    const isExpanded = expandedDays.has(d.day);
-    html += `
-    <div class="day-card${isDone ? ' done' : ''}${isExpanded ? ' expanded' : ''}" id="daycard-${d.day}">
+    const dd = wd.days[d.day]; const isDone = dd?.done; const isExp = expandedDays.has(d.day);
+    h += `<div class="day-card${isDone?' done':''}${isExp?' expanded':''}" id="daycard-${d.day}">
       <div class="day-card-head" onclick="toggleExpand(${d.day})">
         <div class="day-num-badge">${d.day}</div>
         <div class="day-title-col">
@@ -559,40 +435,78 @@ function renderDays() {
           <div class="day-subtitle">${d.exercises.length} упражнений</div>
         </div>
         <div class="day-actions">
-          <div class="done-toggle" onclick="event.stopPropagation(); toggleDone(${d.day})">${isDone ? '✓' : ''}</div>
+          <div class="done-toggle" onclick="event.stopPropagation();toggleDone(${d.day})">${isDone?'✓':''}</div>
           <div class="chevron">▼</div>
         </div>
       </div>
-      <div class="exercises-wrap">
-    `;
-    d.exercises.forEach((ex, i) => {
-      const exD = dayData?.exercises?.[i] || { weight: '', note: '' };
-      html += `
-        <div class="exercise-item">
-          <div class="ex-name">${ex.name}</div>
-          <div class="ex-sets">${ex.sets}</div>
-          <div class="ex-row">
-            <div class="ex-weight-wrap">
-              <div class="weight-minus" onclick="adjustWeight(${d.day},${i},-2.5)">−</div>
-              <input class="weight-input" type="number" inputmode="decimal"
-                value="${exD.weight || ''}" placeholder="0"
-                onchange="setWeight(${d.day},${i},this.value)"
-                oninput="setWeight(${d.day},${i},this.value)"
-                id="w-${currentWeek}-${d.day}-${i}">
-              <div class="weight-unit">кг</div>
-              <div class="weight-plus" onclick="adjustWeight(${d.day},${i},2.5)">+</div>
-            </div>
-            <input class="note-input" type="text" placeholder="заметка…"
-              value="${exD.note || ''}"
-              onchange="setNote(${d.day},${i},this.value)"
-              id="n-${currentWeek}-${d.day}-${i}">
+      <div class="exercises-wrap">`;
+    d.exercises.forEach((ex,i) => {
+      const exD = dd?.exercises?.[i] || {weight:'',note:'',reps:''};
+      const step = unitStep();
+      let bodyHtml;
+      if (ex.repsOnly) {
+        bodyHtml = `<div class="ex-row">
+          <div class="ex-weight-wrap">
+            <div class="weight-minus" onclick="adjustReps(${d.day},${i},-1)">−</div>
+            <input class="weight-input" type="number" inputmode="numeric"
+              value="${exD.reps||''}" placeholder="0"
+              oninput="setReps(${d.day},${i},this.value)"
+              id="w-${currentWeek}-${d.day}-${i}">
+            <div class="weight-unit" style="padding-right:6px">пов</div>
+            <div class="weight-plus" onclick="adjustReps(${d.day},${i},1)">+</div>
+          </div>
+          <input class="note-input" type="text" placeholder="заметка…"
+            value="${exD.note||''}" oninput="setNote(${d.day},${i},this.value)">
+        </div>`;
+      } else if (ex.withReps) {
+        const dispVal = kgToDisplay(exD.weight);
+        bodyHtml = `<div class="ex-dual-row">
+          <div class="ex-weight-wrap compact">
+            <div class="weight-minus" onclick="adjustWeight(${d.day},${i},-${step})">−</div>
+            <input class="weight-input" type="number" inputmode="decimal"
+              value="${dispVal}" placeholder="0"
+              oninput="setWeightFromDisplay(${d.day},${i},this.value)"
+              id="w-${currentWeek}-${d.day}-${i}">
+            <div class="weight-unit">${unitLabel()}</div>
+            <div class="weight-plus" onclick="adjustWeight(${d.day},${i},${step})">+</div>
+          </div>
+          <div class="ex-weight-wrap compact">
+            <div class="weight-minus" onclick="adjustReps(${d.day},${i},-1)">−</div>
+            <input class="weight-input" type="number" inputmode="numeric"
+              value="${exD.reps||''}" placeholder="0"
+              oninput="setReps(${d.day},${i},this.value)"
+              id="r-${currentWeek}-${d.day}-${i}">
+            <div class="weight-unit" style="padding-right:6px">пов</div>
+            <div class="weight-plus" onclick="adjustReps(${d.day},${i},1)">+</div>
           </div>
         </div>
-      `;
+        <input class="note-input" type="text" placeholder="заметка…" style="width:100%"
+          value="${exD.note||''}" oninput="setNote(${d.day},${i},this.value)">`;
+      } else {
+        const dispVal = kgToDisplay(exD.weight);
+        bodyHtml = `<div class="ex-row">
+          <div class="ex-weight-wrap">
+            <div class="weight-minus" onclick="adjustWeight(${d.day},${i},-${step})">−</div>
+            <input class="weight-input" type="number" inputmode="decimal"
+              value="${dispVal}" placeholder="0"
+              oninput="setWeightFromDisplay(${d.day},${i},this.value)"
+              id="w-${currentWeek}-${d.day}-${i}">
+            <div class="weight-unit">${unitLabel()}</div>
+            <div class="weight-plus" onclick="adjustWeight(${d.day},${i},${step})">+</div>
+          </div>
+          <input class="note-input" type="text" placeholder="заметка…"
+            value="${exD.note||''}" oninput="setNote(${d.day},${i},this.value)">
+        </div>`;
+      }
+      h += `<div class="exercise-item">
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-sets">${ex.sets}</div>
+        ${bodyHtml}
+      </div>`;
     });
-    html += `</div></div>`;
+    h += `</div></div>`;
   });
-  document.getElementById('daysList').innerHTML = html;
+  document.getElementById('daysList').innerHTML = h;
 }
 
 function renderWeekNote() {
@@ -600,178 +514,109 @@ function renderWeekNote() {
   const wd = db.weeks[currentWeek];
   document.getElementById('weekNoteWrap').innerHTML = `
     <div class="week-note-label">Заметки к неделе</div>
-    <textarea class="week-note-input" rows="2"
-      placeholder="самочувствие, прогресс, планы…"
-      onchange="setWeekNote(this.value)">${wd.note || ''}</textarea>
-  `;
+    <textarea class="week-note-input" rows="2" placeholder="самочувствие, прогресс…"
+      oninput="setWeekNote(this.value)">${wd.note||''}</textarea>`;
 }
 
-function render() {
-  renderTabs();
-  renderMeta();
-  renderDays();
-  renderWeekNote();
-}
+function render() { renderTabs(); renderMeta(); renderDays(); renderWeekNote(); }
 
-// ── ДЕЙСТВИЯ ──────────────────────────────────────────────────────────────
-function switchWeek(w) {
-  currentWeek = w;
-  expandedDays.clear();
-  render();
-}
+// ── ACTIONS ───────────────────────────────────────────────────────────────
+function switchWeek(w) { currentWeek=w; expandedDays.clear(); render(); }
 
 function addWeek() {
-  db.numWeeks++;
-  ensureWeek(db.numWeeks);
-  save();
-  currentWeek = db.numWeeks;
-  expandedDays.clear();
-  render();
+  db.numWeeks++; ensureWeek(db.numWeeks); saveLocal(); schedulSync();
+  currentWeek=db.numWeeks; expandedDays.clear(); render();
   showToast(`Неделя ${db.numWeeks} добавлена`);
 }
 
 function toggleExpand(day) {
-  if (expandedDays.has(day)) expandedDays.delete(day);
-  else expandedDays.add(day);
-  const card = document.getElementById(`daycard-${day}`);
-  if (card) card.classList.toggle('expanded', expandedDays.has(day));
-  // re-render chevron via class only — no full re-render for smoothness
+  if (expandedDays.has(day)) expandedDays.delete(day); else expandedDays.add(day);
+  const c = document.getElementById(`daycard-${day}`);
+  if (c) c.classList.toggle('expanded', expandedDays.has(day));
 }
 
 function toggleDone(day) {
   ensureWeek(currentWeek);
   const d = db.weeks[currentWeek].days[day];
-  d.done = !d.done;
-  save();
-  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred(d.done ? 'medium' : 'light');
-  renderMeta();
-  renderTabs();
-  const card = document.getElementById(`daycard-${day}`);
-  if (card) {
-    card.classList.toggle('done', d.done);
-    const toggle = card.querySelector('.done-toggle');
-    if (toggle) toggle.textContent = d.done ? '✓' : '';
-    const num = card.querySelector('.day-num-badge');
-    const title = card.querySelector('.day-title');
-  }
+  d.done = !d.done; saveLocal(); schedulSync();
+  if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred(d.done?'medium':'light');
+  renderMeta(); renderTabs();
+  const c = document.getElementById(`daycard-${day}`);
+  if (c) { c.classList.toggle('done',d.done); const t=c.querySelector('.done-toggle'); if(t) t.textContent=d.done?'✓':''; }
   showToast(d.done ? `День ${day} выполнен ✓` : `День ${day} — снято`);
 }
 
-function adjustWeight(day, exIdx, delta) {
+function adjustWeight(day,exIdx,delta) {
   ensureWeek(currentWeek);
   const exD = db.weeks[currentWeek].days[day].exercises[exIdx];
-  let val = parseFloat(exD.weight || 0) + delta;
-  if (val < 0) val = 0;
-  val = Math.round(val * 2) / 2;
-  exD.weight = val > 0 ? val : '';
-  save();
-  const input = document.getElementById(`w-${currentWeek}-${day}-${exIdx}`);
-  if (input) input.value = exD.weight;
+  // delta is already in display units — convert to kg for storage
+  const currentKg = parseFloat(exD.weight || 0);
+  const currentDisp = unit === 'lb' ? currentKg * KG_TO_LB : currentKg;
+  let newDisp = Math.round((currentDisp + delta) * 20) / 20;
+  if (newDisp < 0) newDisp = 0;
+  exD.weight = newDisp > 0 ? displayToKg(newDisp) : '';
+  saveLocal(); schedulSync();
+  const inp = document.getElementById(`w-${currentWeek}-${day}-${exIdx}`);
+  if (inp) inp.value = newDisp > 0 ? kgToDisplay(exD.weight) : '';
   if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
 }
 
-function setWeight(day, exIdx, val) {
+function setWeightFromDisplay(day,exIdx,val) {
   ensureWeek(currentWeek);
-  db.weeks[currentWeek].days[day].exercises[exIdx].weight = val;
-  save();
+  db.weeks[currentWeek].days[day].exercises[exIdx].weight = displayToKg(val);
+  saveLocal(); schedulSync();
 }
 
-function setNote(day, exIdx, val) {
+function adjustReps(day,exIdx,delta) {
   ensureWeek(currentWeek);
-  db.weeks[currentWeek].days[day].exercises[exIdx].note = val;
-  save();
+  const exD = db.weeks[currentWeek].days[day].exercises[exIdx];
+  let v = Math.max(0, parseInt(exD.reps||0) + delta);
+  exD.reps = v > 0 ? v : '';
+  saveLocal(); schedulSync();
+  // reps input may have id "w-" (repsOnly) or "r-" (withReps)
+  const inp = document.getElementById(`r-${currentWeek}-${day}-${exIdx}`)
+           || document.getElementById(`w-${currentWeek}-${day}-${exIdx}`);
+  if (inp) inp.value = exD.reps;
+  if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
 }
 
-function setWeekNote(val) {
+function setReps(day,exIdx,val) {
   ensureWeek(currentWeek);
-  db.weeks[currentWeek].note = val;
-  save();
+  const v = parseInt(val);
+  db.weeks[currentWeek].days[day].exercises[exIdx].reps = isNaN(v) ? '' : v;
+  saveLocal(); schedulSync();
 }
+function setNote(day,exIdx,val) { ensureWeek(currentWeek); db.weeks[currentWeek].days[day].exercises[exIdx].note=val; saveLocal(); schedulSync(); }
+function setWeekNote(val) { ensureWeek(currentWeek); db.weeks[currentWeek].note=val; saveLocal(); schedulSync(); }
 
-// ── ДАТА ──────────────────────────────────────────────────────────────────
 function pickDate() {
   const inp = document.getElementById('hiddenDateInput');
-  ensureWeek(currentWeek);
-  inp.value = db.weeks[currentWeek].startDate || '';
-  inp.style.pointerEvents = 'auto';
-  inp.focus();
-  inp.click();
+  ensureWeek(currentWeek); inp.value = db.weeks[currentWeek].startDate||'';
+  inp.style.pointerEvents='auto'; inp.focus(); inp.click();
   inp.onchange = () => {
-    db.weeks[currentWeek].startDate = inp.value;
-    save();
-    inp.style.pointerEvents = 'none';
-    renderMeta();
+    db.weeks[currentWeek].startDate=inp.value; saveLocal(); schedulSync();
+    inp.style.pointerEvents='none'; renderMeta();
   };
 }
 
-// ── TOAST ─────────────────────────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(window._tt);
-  window._tt = setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-// ── ЭКСПОРТ Excel ─────────────────────────────────────────────────────────
-function exportXLSX() {
-  const wb = XLSX.utils.book_new();
-  for (let w = 1; w <= db.numWeeks; w++) {
-    ensureWeek(w);
-    const wd = db.weeks[w];
-    const rows = [
-      [`Неделя ${w}`, wd.startDate ? `Начало: ${wd.startDate}` : ''],
-      [],
-      ['День', 'Группа мышц', 'Упражнение', 'Подходы', 'Вес (кг)', 'Заметка', 'Выполнен'],
-    ];
-    PROGRAM.forEach(d => {
-      const dayData = wd.days[d.day];
-      d.exercises.forEach((ex, i) => {
-        const exD = dayData?.exercises?.[i] || {};
-        rows.push([
-          `День ${d.day}`, d.title, ex.name, ex.sets,
-          exD.weight || '', exD.note || '',
-          i === 0 ? (dayData?.done ? 'Да' : 'Нет') : '',
-        ]);
-      });
-      rows.push([]);
-    });
-    if (wd.note) rows.push(['', '', '', '', '', `Заметки: ${wd.note}`]);
-    const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols'] = [{wch:8},{wch:22},{wch:40},{wch:28},{wch:10},{wch:22},{wch:10}];
-    XLSX.utils.book_append_sheet(wb, ws, `Неделя ${w}`);
-  }
-  XLSX.writeFile(wb, `BSS_${new Date().toISOString().slice(0,10)}.xlsx`);
-  showToast('Excel готов!');
-}
-
-function exportCSV() {
-  let csv = '\uFEFF';
-  csv += 'Неделя;Дата;День;Группа;Упражнение;Подходы;Вес;Заметка;Выполнен\n';
-  for (let w = 1; w <= db.numWeeks; w++) {
-    ensureWeek(w);
-    const wd = db.weeks[w];
-    PROGRAM.forEach(d => {
-      const dayData = wd.days[d.day];
-      d.exercises.forEach((ex, i) => {
-        const exD = dayData?.exercises?.[i] || {};
-        csv += [w, wd.startDate||'', d.day, `"${d.title}"`,
-          `"${ex.name}"`, `"${ex.sets}"`, exD.weight||'',
-          `"${(exD.note||'').replace(/"/g,'""')}"`,
-          i===0?(dayData?.done?'Да':'Нет'):''].join(';') + '\n';
-      });
-    });
-  }
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url;
-  a.download = `BSS_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click(); URL.revokeObjectURL(url);
-  showToast('CSV готов!');
+function showToast(msg,isErr=false) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(isErr?' err':''); t.classList.add('show');
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.classList.remove('show'),2500);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────
-render();
+async function init() {
+  document.getElementById('unitKg').classList.toggle('active', unit === 'kg');
+  document.getElementById('unitLb').classList.toggle('active', unit === 'lb');
+  renderSetupBanner();
+  if (SCRIPT_URL) {
+    const loaded = await loadFromSheets();
+    if (loaded) { render(); return; }
+  }
+  render();
+}
+init();
 </script>
 </body>
 </html>
